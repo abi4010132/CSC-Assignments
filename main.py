@@ -6,7 +6,7 @@ from STV import STV
 
 # convert .txt file to a list of Ballot objects.
 def read_votes(file_path):
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r') as file: 
         lines = [line.strip() for line in file if not line.startswith('#')]
         votes = [Ballot(line) for line in lines]
     return votes

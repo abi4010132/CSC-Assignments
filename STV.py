@@ -19,10 +19,21 @@ class STV:
             if ballot.get_ranking():
                 for alternative in ballot.get_ranking():
                     # Initialise alternative with 0, incase alternative is never plurality winner
-                    if alternative not in self.tally:
-                        self.tally[alternative] = 0
-                # Update tally, with plurality winner and number of voters
-                self.tally.update({ballot.get_plurality(): ballot.get_count()})
+                    if isinstance(alternative, list):
+                        for alt in alternative:
+                            if alt not in self.tally:
+                                self.tally[alt] = 0
+                    else: 
+                        if alternative not in self.tally:
+                            self.tally[alternative] = 0
+
+                # Update tally, with plurality winner(s) and number of voters
+                plurality = ballot.get_plurality()
+                if isinstance(plurality, list):
+                    for alternative in plurality:
+                        self.tally.update({alternative: ballot.get_count()}) 
+                else:
+                    self.tally.update({plurality: ballot.get_count()})
     
     # Eliminate lowest alternative(s) from tally and votes
     def eliminate_lowest_alternatives(self):
