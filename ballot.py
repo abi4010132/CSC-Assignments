@@ -9,11 +9,17 @@ class Ballot:
         self.ranking = []
         # Idk how to handle the tied votes (I assume?) so I just remove them for now
         alternatives = re.findall(r"\d+|{[^{}]+}", alternatives_string)
-        for alternative in alternatives:
+        self.ranking_map = {}
+
+        for idx, alternative in enumerate(alternatives):
             if alternative.startswith('{') and alternative.endswith('}'):
-                self.ranking.append(list(map(int, alternative.strip('{}').split(','))))
+                alts = list(map(int, alternative.strip('{}').split(',')))
+                self.ranking.append(alts)
+                self.ranking_map[alts[0]] = idx
+                self.ranking_map[alts[1]] = idx
             else:
                 self.ranking.append(int(alternative))
+                self.ranking_map[int(alternative)] = idx
 
     # Eliminate the specified alternative
     def eliminate_alternative(self, alternative):
@@ -24,6 +30,8 @@ class Ballot:
             else:
                 if alternative == alt:
                     self.ranking.remove(alternative)
+                    # make sure it is the lowest ranked in the order
+                    self.ranking_map[alternative] = len(self.ranking)
             
     # Getter for voting preference
     def get_ranking(self):
@@ -39,3 +47,11 @@ class Ballot:
             return self.ranking[0]
         else:
             return None
+        
+    # out of two alternatives, pick the more preferred one according to this ballot
+    def compare_alternatives(self, alt1, alt2):
+        if self.ranking_map[alt1] < self.ranking_map[alt2]:
+            return alt1
+        elif self.ranking_map[alt2] < self.ranking_map[alt1]:
+            return alt2
+        return None

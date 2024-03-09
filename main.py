@@ -3,6 +3,7 @@ import os
 from collections import Counter
 from ballot import Ballot
 from STV import STV
+from STVManipulator import STVManipulator
 
 # convert .txt file to a list of Ballot objects.
 def read_votes(file_path):
@@ -17,3 +18,4 @@ if __name__ == '__main__':
     print(stv.get_tally())
     winner = stv.start()
     print(f"{winner} is the highest ranked alternative!")
+    manip = STVManipulator(votes)
