@@ -15,4 +15,5 @@ if __name__ == '__main__':
     votes = read_votes('data.txt')
     stv = STV(votes)
     print(stv.get_tally())
-    stv.start()
+    winner = stv.start()
+    print(f"{winner} is the highest ranked alternative!")

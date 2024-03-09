@@ -80,5 +80,6 @@ class STV:
     def start(self):
         while (len(self.tally) > 1) and min(self.tally.values()) != max(self.tally.values()):
             self.round()
-        print(f"{self.get_winner()} is the highest ranked alternative!")
+        return self.get_winner()
+        
         
