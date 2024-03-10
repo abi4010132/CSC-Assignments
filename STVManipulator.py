@@ -100,6 +100,6 @@ class STVManipulator():
     # Create an initial manipulation ballot guess
     def get_initial_manipulation_ballot(alt):
         manipulation_ballot = list(range(1, N_ALTERNATIVES+1))
-        del manipulation_ballot[alt+1]
-        del manipulation_ballot[self.init_winner+1]
+        del manipulation_ballot[alt-1]
+        del manipulation_ballot[self.init_winner-1]
         manipulation_ballot = [alt]+manipulation_ballot+[self.init_winner]
