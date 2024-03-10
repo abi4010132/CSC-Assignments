@@ -41,7 +41,6 @@ class STVManipulator():
 
     
     def elect_alternative_bottomup(self, suitable_ballots, alternative):
-        suitable_ballots = suitable_ballots
         opposition_ballots = list((Counter(self.all_ballots)-Counter(suitable_ballots)).elements())
     
         # Start recursion
@@ -73,7 +72,6 @@ class STVManipulator():
                 if win: # Return the solution if it wins
                     return manipulators, manipulation_ballot
                 else: # Otherwise, try to improve (somehow?) the manipulation ballot
-                    manipulation_ballot_options = list(itertools.permutations(list(range(1, N_ALTERNATIVES+1))))
                     manipulation_ballot_options.remove(manipulation_ballot)
                     manipulation_ballot = improve_manipulation_ballot(alt, tally_before_end, manipulation_ballot, manipulation_ballot_options)
     
@@ -102,6 +100,6 @@ class STVManipulator():
     # Create an initial manipulation ballot guess
     def get_initial_manipulation_ballot(alt):
         manipulation_ballot = list(range(1, N_ALTERNATIVES+1))
-        del manipulation_ballot[alt]
-        del manipulation_ballot[self.init_winner]
+        del manipulation_ballot[alt+1]
+        del manipulation_ballot[self.init_winner+1]
         manipulation_ballot = [alt]+manipulation_ballot+[self.init_winner]
