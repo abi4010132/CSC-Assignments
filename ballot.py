@@ -1,15 +1,17 @@
 import re 
+import numpy as np
 
 # This class represents a specific voting preference + the number of voters that have it
 class Ballot:
     
-    def __init__(self, vote):
+    def __init__(self, vote, n_alternatives=11):
         count, alternatives_string = [x.strip() for x in vote.split(':')]
         self.count = int(count)
         self.ranking = []
+        self.n_alternatives = n_alternatives
         # Idk how to handle the tied votes (I assume?) so I just remove them for now
         alternatives = re.findall(r"\d+|{[^{}]+}", alternatives_string)
-        self.ranking_map = {}
+        self.ranking_map = np.ones(n_alternatives + 1) * n_alternatives
 
         for idx, alternative in enumerate(alternatives):
             if alternative.startswith('{') and alternative.endswith('}'):
@@ -27,6 +29,7 @@ class Ballot:
             if isinstance(alt, list):
                 if alternative in alt:
                     self.ranking[self.ranking.index(alt)].remove(alternative)
+                    self.ranking_map[alternative] = len(self.ranking)
             else:
                 if alternative == alt:
                     self.ranking.remove(alternative)

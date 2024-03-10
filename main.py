@@ -19,3 +19,4 @@ if __name__ == '__main__':
     winner = stv.start()
     print(f"{winner} is the highest ranked alternative!")
     manip = STVManipulator(votes)
+    print(manip.find_manipulation())
