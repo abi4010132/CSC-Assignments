@@ -1,6 +1,3 @@
-import errno
-import os
-from collections import Counter
 from ballot import Ballot
 from STV import STV
 
