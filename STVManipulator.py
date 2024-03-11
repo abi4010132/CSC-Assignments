@@ -29,7 +29,7 @@ class STVManipulator():
             print("trying alternative", alt)
             suitable_ballots = self.remove_opposition_voters(alt)
             new_s, new_manip_ballot, new_manipulators = self.elect_alternative_bottomup(suitable_ballots, alt, s)
-            if new_s < s: # A new minimum manipulation set is found
+            if new_s != 9999: # A new minimum manipulation set is found
                 s = new_s
                 manipulators = new_manipulators
                 manip_ballot = new_manip_ballot
@@ -53,7 +53,7 @@ class STVManipulator():
     # Find the minimum set of voters and manipulation ballot that can manipulate the election to result in the given alternative, with binary search
     def elect_alternative_binary(self, suitable_ballots, alt, min_of_other_alts):
         opposition_ballots = list((Counter(self.all_ballots) - Counter(suitable_ballots)).elements())
-        max_manipulators = min(len(suitable_ballots), min_of_other_alts) # The maximum possible number of manipulators that could be a solution
+        max_manipulators = min(len(suitable_ballots), min_of_other_alts-1) # The maximum possible number of manipulators that could be a solution
         s = max_manipulators # The set size that will be tried next
         min_manipulators = 1  # The minimum possible number of manipulators that could be a solution
 
@@ -90,7 +90,7 @@ class STVManipulator():
     # Find the minimum set of voters and manipulation ballot that can manipulate the election to result in the given alternative, with increasing set size
     def elect_alternative_bottomup(self, suitable_ballots, alt, min_of_other_alts):
         opposition_ballots = list((Counter(self.all_ballots) - Counter(suitable_ballots)).elements())
-        max_manipulators = min(len(suitable_ballots), min_of_other_alts) # The maximum possible number of manipulators that could be a solution
+        max_manipulators = min(len(suitable_ballots), min_of_other_alts-1) # The maximum possible number of manipulators that could be a solution
 
         for s in range(1, max_manipulators+1):
             # Try to find manipulators and a manipulation ballot for a set size of s
