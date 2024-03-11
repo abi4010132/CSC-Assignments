@@ -23,7 +23,7 @@ class STVManipulator():
         manip_alt = None
 
         # Loop over all alternatives in order of Borda score
-        alts = [x for x in self.alts if x != self.init_winner]
+        alts = [x for x in self.alts if x not in self.init_winner]
         alts = self.sort_by_borda_scores(self.all_ballots, alts)
         for alt in alts:
             print("trying alternative", alt)
@@ -42,14 +42,17 @@ class STVManipulator():
     def remove_opposition_voters(self, alt):
         suitable_ballots = []
         for ballot in self.all_ballots:
-            if alt == ballot.compare_alternatives(alt, self.init_winner):
+            for winner in self.init_winner:
+                if winner == ballot.compare_alternatives(alt, winner):
+                    break
+            else:
                 suitable_ballots.append(ballot)
 
         return suitable_ballots
 
     # Find the minimum set of voters and manipulation ballot that can manipulate the election to result in the given alternative
     def elect_alternative_bottomup(self, suitable_ballots, alt, min_of_other_alts):
-        opposition_ballots = list((Counter(self.all_ballots)-Counter(suitable_ballots)).elements())
+        opposition_ballots = list((Counter(self.all_ballots) - Counter(suitable_ballots)).elements())
         max_manipulators = min(len(suitable_ballots), min_of_other_alts) # The maximum possible number of manipulators that could be a solution
         s = max_manipulators # The set size that will be tried next
         min_manipulators = 1  # The minimum possible number of manipulators that could be a solution
@@ -72,7 +75,7 @@ class STVManipulator():
 
             if manipulators == []: # No manipulation possible
                 if s == max_manipulators: break
-                min_manipulators = s+1 
+                min_manipulators = s + 1 
                 s += math.ceil((max_manipulators-s)/2) # Binary search upwards
             else:
                 if s < best_manipulators_len: # Manipulation possible
@@ -95,7 +98,7 @@ class STVManipulator():
         print("trying size", num_manipulators)
     
         # Loop over all subsets of manipulators with size=num_manipulators
-        for manipulators in itertools.permutations(suitable_ballots, r=num_manipulators):
+        for manipulators in set(itertools.combinations(suitable_ballots, r=num_manipulators)):
             while not manipulation_ballot is None: # None if there is no ballot that is better than those already tried
                 # See if this subset and manipulation ballot wins
                 profile = self.get_profile(suitable_ballots, opposition_ballots, manipulators, manipulation_ballot)
@@ -130,8 +133,9 @@ class STVManipulator():
     def get_initial_manipulation_ballot(self, alt):
         manipulation_ballot = self.alts.copy()
         manipulation_ballot.remove(alt)
-        manipulation_ballot.remove(self.init_winner)
-        manipulation_ballot = [alt]+manipulation_ballot+[self.init_winner]
+        for winner in self.init_winner:
+            manipulation_ballot.remove(winner)
+        manipulation_ballot = [alt] + manipulation_ballot+ self.init_winner
         return Ballot(manipulation_ballot)
 
     # Sort alternatives by their Borda scores
