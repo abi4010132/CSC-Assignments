@@ -49,7 +49,7 @@ class STVManipulator():
         suitable_ballots = []
         for ballot in self.all_ballots:
             for winner in self.init_winner:
-                if winner == ballot.compare_alternatives(alt, winner):
+                if alt != ballot.compare_alternatives(alt, winner):
                     break
             else:
                 suitable_ballots.append(ballot)
