@@ -1,4 +1,3 @@
-from collections import Counter
 from ballot import Ballot
 from STV import STV
 from STVManipulator import STVManipulator
@@ -6,9 +5,9 @@ import random
 import copy
 import timeit
 
-#random.seed(5)
+random.seed(5)
 
-N_VOTERS = 30
+N_VOTERS = 20
 LARGE_VALUE = 999999
 VERBOSE = True
 

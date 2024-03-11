@@ -1,4 +1,3 @@
-import re 
 
 class Ballot:
     """Represents a specific voting preference + the number of voters that have it """
