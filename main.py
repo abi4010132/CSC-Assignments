@@ -6,9 +6,10 @@ import random
 import copy
 import timeit
 
-#random.seed(5)
+random.seed(5)
 
-N_VOTERS = 30
+N_VOTERS = 20
+LARGE_VALUE = 999999
 
 # convert .txt file to a list of Ballot objects.
 def read_votes(file_path):
@@ -41,25 +42,17 @@ def reduce_votes(votes, alts, n):
 if __name__ == '__main__':
     t_start = timeit.default_timer()
     votes = read_votes('data.txt')
-    alts = [8,2,3,4]
+    alts = [8,2,3,4,5,1]
     votes = reduce_votes(votes, alts, N_VOTERS)
     print(f"submitted ballots: {list(map(lambda x: x.ranking, votes))}")
-
-    # stv = STV(votes)
-    # print(stv.get_tally())
-    # winner = stv.start()
-    # print(f"{winner} is the highest ranked alternative!")
     
     manip = STVManipulator(votes, alts)
     print(f"initial winner: {manip.init_winner}")
-    #if len(manip.init_winner) > 1:
-    #    print('Error: multiple winners')
-    #    exit()
-    #manip.init_winner = manip.init_winner[0]
     
     alt, s, manip_ballot, manipulators = manip.find_manipulation()
-    if s != 9999: # Manipulation is possible
-        print('alt =', alt, 'min size =', s, ':', [x.ranking for x in manipulators], 'to', manip_ballot.ranking)
+    if s != LARGE_VALUE: # Manipulation is possible
+        print(f"Manipulation found! {s} voters who prefer alternative {alt} can change the results:")
+        print(f"{[x.ranking for x in manipulators]} change their votes to {manip_ballot.ranking}")
 
         # Confirm the solution by first running stv on the initial votes
         stv = STV(votes)
@@ -81,7 +74,7 @@ if __name__ == '__main__':
         votes.append(manip_ballot)
         stv = STV(votes)
         winner_m = stv.start()
-        print('Unmanipulated winner:', winner, 'Manipulated winner', winner_m)
+        print('Initial winner:', winner, 'Winner after manipulation', winner_m)
 
     else:
         print("Manipulation is impossible")
