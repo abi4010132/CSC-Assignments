@@ -29,7 +29,6 @@ class STV:
 
     def eliminate_lowest_alternatives(self):
         """This method eliminates the lowest alternative(s) from the Ballots in the STV"""
-
         # List in case multiple tied lowest alternatives
         lowest_alternatives = []
         # If lowest and highest alternative count are the same stop elimination
@@ -46,6 +45,7 @@ class STV:
             for ballot in self.ballots:
                 ballot.eliminate_alternative(alternative)
             del self.tally[alternative]
+
 
     def round(self):
         """This method represents a round of an STV process by eliminating the lowest alternatives and then updating the tally"""

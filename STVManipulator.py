@@ -61,6 +61,7 @@ class STVManipulator():
 
         return suitable_ballots
 
+      
     def elect_alternative_binary(self, suitable_ballots, alt, min_of_other_alts):
         """Finds the minimum set of voters and manipulation ballot that can manipulate the election to result in the given alternative, with binary search"""
 
@@ -133,6 +134,7 @@ class STVManipulator():
             while not manipulation_ballot is None: # None if there is no ballot that is better than those already tried
                 # See if this subset and manipulation ballot wins
                 profile = self.get_profile(suitable_ballots, opposition_ballots, manipulators, manipulation_ballot)
+
                 stv = STV(profile)
                 win, tally_before_end = self.stv_until_loss(alt, stv)
                 if win: # Return the solution if it wins
@@ -145,7 +147,6 @@ class STVManipulator():
     
     def stv_until_loss(self, alt, stv):
         """Runs the stv competition until a certain alternative is eliminated or wins, and return the tally from the round before that"""
-
         while (len(stv.tally) > 1) and min(stv.tally.values()) != max(stv.tally.values()):
             if stv.tally[alt] == min(stv.tally.values()):
                 return False, stv.tally
@@ -154,6 +155,7 @@ class STVManipulator():
                 stv.update_tally()
         return True, stv.tally
     
+
     def improve_manipulation_ballot(self, alt, tally_before_end, manipulation_ballot, manipulation_ballot_options):
         """Tries to improve the manipulation_ballot, currently chooses a random option"""
 
@@ -188,3 +190,4 @@ class STVManipulator():
             alts2.append(alts[idx_max])
             del alts[idx_max]
         return alts2
+

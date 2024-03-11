@@ -35,12 +35,12 @@ class Ballot:
     
     def get_plurality(self):
         """Getter for the Ballot's top ranked alternative."""
-
         if self.ranking:
             return self.ranking[0]
         else:
             return None
-        
+
+          
     def compare_alternatives(self, alt1, alt2):
         """Method to compare two alternatives and return the more preferred one for this Ballot"""
         
