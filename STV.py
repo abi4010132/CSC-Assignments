@@ -4,7 +4,7 @@ from typing import List
 import copy
 
 class STV:
-    """This class represents the process of an STV"""
+    """This class represents an STV election"""
 
     def __init__(self, ballots: List[Ballot]):
         """Used to instantiate an STV, with a list of Ballots"""
@@ -29,7 +29,7 @@ class STV:
 
     def eliminate_lowest_alternatives(self):
         """This method eliminates the lowest alternative(s) from the Ballots in the STV"""
-        
+
         # List in case multiple tied lowest alternatives
         lowest_alternatives = []
         # If lowest and highest alternative count are the same stop elimination

@@ -10,7 +10,7 @@ from STV import STV
 LARGE_VALUE = 999999
 
 class STVManipulator():
-    """This class is contains methods to attempt to manipulate an STV"""
+    """This class is contains methods to attempt to manipulate an STV election"""
 
     def __init__(self, votes, alts, verbose=False) -> None:
         """Used to instantiate the STVManipulator using a list of Ballots and a list of alternatives"""
