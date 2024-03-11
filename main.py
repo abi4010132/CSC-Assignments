@@ -6,10 +6,11 @@ import random
 import copy
 import timeit
 
-random.seed(5)
+#random.seed(5)
 
-N_VOTERS = 20
+N_VOTERS = 30
 LARGE_VALUE = 999999
+VERBOSE = True
 
 # convert .txt file to a list of Ballot objects.
 def read_votes(file_path):
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     votes = reduce_votes(votes, alts, N_VOTERS)
     print(f"submitted ballots: {list(map(lambda x: x.ranking, votes))}")
     
-    manip = STVManipulator(votes, alts)
+    manip = STVManipulator(votes, alts, verbose=VERBOSE)
     print(f"initial winner: {manip.init_winner}")
     
     alt, s, manip_ballot, manipulators = manip.find_manipulation()
