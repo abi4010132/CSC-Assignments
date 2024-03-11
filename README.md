@@ -4,4 +4,4 @@
 [STV.py](STV.py) contains our implementation of an STV election. \
 [main.py](main.py) use this file to run the program in python.
 
-Part 2 of the assignment can be found [here](https://github.com/abi4010132/CSC-Assignments/tree/assignment3-part2-bruteforce).
+Part 2 of the assignment can be found [here](https://github.com/abi4010132/CSC-Assignments/tree/assignment3-part2).
