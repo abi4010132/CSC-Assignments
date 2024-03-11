@@ -8,11 +8,13 @@ class STV:
 
     def __init__(self, ballots: List[Ballot]):
         """Used to instantiate an STV, with a list of Ballots"""
+
         self.ballots = copy.deepcopy(ballots)
         self.update_tally()
 
     def update_tally(self):
         """This method updates the tally of the plurality votes each alternative gets in a Counter"""
+        
         # Reset counter, to recount after elimination of an alternative
         self.tally = Counter()
         for ballot in self.ballots:
@@ -27,6 +29,7 @@ class STV:
 
     def eliminate_lowest_alternatives(self):
         """This method eliminates the lowest alternative(s) from the Ballots in the STV"""
+        
         # List in case multiple tied lowest alternatives
         lowest_alternatives = []
         # If lowest and highest alternative count are the same stop elimination
@@ -46,12 +49,13 @@ class STV:
 
     def round(self):
         """This method represents a round of an STV process by eliminating the lowest alternatives and then updating the tally"""
+
         self.eliminate_lowest_alternatives()
         self.update_tally()
 
-    # Getter for tally
     def get_tally(self):
         """Getter for the tally of the STV"""
+
         return self.tally
 
     def get_winner(self):

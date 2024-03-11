@@ -10,8 +10,10 @@ from STV import STV
 LARGE_VALUE = 999999
 
 class STVManipulator():
+    """This class is contains methods to attempt to manipulate an STV"""
 
     def __init__(self, votes, alts, verbose=False) -> None:
+        """Used to instantiate the STVManipulator using a list of Ballots and a list of alternatives"""
         self.alts = alts
         self.verbose = verbose
         stv_election = STV(votes)
@@ -20,6 +22,8 @@ class STVManipulator():
     
 
     def find_manipulation(self):
+        """This method tries to find a manipulation for the STV"""
+
         s = LARGE_VALUE
         manip_ballot = None
         manipulators = None
@@ -44,8 +48,9 @@ class STVManipulator():
         return manip_alt, s, manip_ballot, manipulators
 
 
-    # find the list of ballots which prefer the given alternative to the current winner
     def remove_opposition_voters(self, alt):
+        """Finds the list of ballots which prefer the given alternative to the current winner"""
+
         suitable_ballots = []
         for ballot in self.all_ballots:
             for winner in self.init_winner:
@@ -56,8 +61,9 @@ class STVManipulator():
 
         return suitable_ballots
 
-    # Find the minimum set of voters and manipulation ballot that can manipulate the election to result in the given alternative, with binary search
     def elect_alternative_binary(self, suitable_ballots, alt, min_of_other_alts):
+        """Finds the minimum set of voters and manipulation ballot that can manipulate the election to result in the given alternative, with binary search"""
+
         opposition_ballots = list((Counter(self.all_ballots) - Counter(suitable_ballots)).elements())
         max_manipulators = min(len(suitable_ballots), min_of_other_alts-1) # The maximum possible number of manipulators that could be a solution
         s = max_manipulators # The set size that will be tried next
@@ -93,8 +99,9 @@ class STVManipulator():
 
         return best_manipulators_len, best_manipulation_ballot, best_manipulators
 
-    # Find the minimum set of voters and manipulation ballot that can manipulate the election to result in the given alternative, with increasing set size
     def elect_alternative_bottomup(self, suitable_ballots, alt, min_of_other_alts):
+        """Finds the minimum set of voters and manipulation ballot that can manipulate the election to result in the given alternative, with increasing set size"""
+
         opposition_ballots = list((Counter(self.all_ballots) - Counter(suitable_ballots)).elements())
         max_manipulators = min(len(suitable_ballots), min_of_other_alts-1) # The maximum possible number of manipulators that could be a solution
 
@@ -108,14 +115,16 @@ class STVManipulator():
                 return len(manipulators), manipulation_ballot, manipulators
         return LARGE_VALUE, [], [] # Manipulation impossible
 
-    # Build a profile from three subsets: 1) opposition ballots 2) suitable but preserved ballots 3) manipulated ballots
     def get_profile(self, suitable_ballots, opposition_ballots, manipulators, manipulation_ballot):
+        """Build a profile from three subsets: 1) opposition ballots 2) suitable but preserved ballots 3) manipulated ballots"""
+
         preserved_suitable_ballots = list((Counter(suitable_ballots)-Counter(manipulators)).elements())
         manipulation_ballot.count = len(manipulators)
         return opposition_ballots+preserved_suitable_ballots+[copy.deepcopy(manipulation_ballot)]
     
-    # Try to find manipulators and a manipulation ballot for a specific manipulator set size
     def try_manipulate(self, alt, suitable_ballots, opposition_ballots, manipulation_ballot, num_manipulators, manipulation_ballot_options):
+        """Tries to find manipulators and a manipulation ballot for a specific manipulator set size"""
+
         if self.verbose:
             print("trying size", num_manipulators)
     
@@ -134,8 +143,9 @@ class STVManipulator():
             
         return [], None
     
-    # Run the stv competition until a certain alternative is eliminated or wins, and return the tally from the round before that
     def stv_until_loss(self, alt, stv):
+        """Runs the stv competition until a certain alternative is eliminated or wins, and return the tally from the round before that"""
+
         while (len(stv.tally) > 1) and min(stv.tally.values()) != max(stv.tally.values()):
             if stv.tally[alt] == min(stv.tally.values()):
                 return False, stv.tally
@@ -145,14 +155,17 @@ class STVManipulator():
         return True, stv.tally
     
     def improve_manipulation_ballot(self, alt, tally_before_end, manipulation_ballot, manipulation_ballot_options):
+        """Tries to improve the manipulation_ballot, currently chooses a random option"""
+
         if manipulation_ballot_options == []:
             return None
         else:
             # Just picks a random one
             return random.choice(manipulation_ballot_options)
     
-    # Create an initial manipulation ballot string guess
     def get_initial_manipulation_ballot(self, alt):
+        """Create an initial manipulation ballot string guess"""
+
         manipulation_ballot = self.alts.copy()
         manipulation_ballot.remove(alt)
         for winner in self.init_winner:
@@ -160,8 +173,9 @@ class STVManipulator():
         manipulation_ballot = [alt] + manipulation_ballot+ self.init_winner
         return Ballot(manipulation_ballot)
 
-    # Sort alternatives by their Borda scores
     def sort_by_borda_scores(self, votes, alts):
+        """Sorts alternatives by their Borda scores"""
+
         borda_scores = [0]*len(alts)
         for ballot in votes:
             for i, r in enumerate(ballot.ranking):

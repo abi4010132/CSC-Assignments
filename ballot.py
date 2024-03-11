@@ -5,6 +5,7 @@ class Ballot:
 
     def __init__(self, vote):
         """Used to instantiate a Ballot and takes in a str/tuple/list"""
+
         if type(vote) == str:
             # split the line of the dataset into a tuple, with the number of voters and ranking
             count, alternatives = [x.strip() for x in vote.split(':')]
@@ -18,19 +19,23 @@ class Ballot:
 
     def eliminate_alternative(self, alternative):
         """Removes a specified alternative from Ballot's ranking."""
+
         if alternative in self.ranking:
             self.ranking.remove(alternative)
             
     def get_ranking(self):
         """Getter for the Ballot's ranking."""
+
         return self.ranking
     
     def get_count(self):
         """Getter for the Ballot's number of voters."""
+
         return self.count
     
     def get_plurality(self):
         """Getter for the Ballot's top ranked alternative."""
+
         if self.ranking:
             return self.ranking[0]
         else:
@@ -38,6 +43,7 @@ class Ballot:
         
     def compare_alternatives(self, alt1, alt2):
         """Method to compare two alternatives and return the more preferred one for this Ballot"""
+        
         # Check if both alternatives are in Ballot ranking
         if alt1 in self.ranking:
             if alt2 in self.ranking:
@@ -55,6 +61,7 @@ class Ballot:
         
     def __eq__(self, other): 
         """This method compares the rankings of Ballots"""
+
         if not isinstance(other, Ballot):
             # don't attempt to compare against unrelated types
             return NotImplemented
@@ -62,4 +69,5 @@ class Ballot:
 
     def __hash__(self):
         """Converts the Ballot's ranking and number of voters to a hash"""
+        
         return hash((self.count, tuple(self.ranking)))

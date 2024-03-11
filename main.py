@@ -12,16 +12,17 @@ N_VOTERS = 30
 LARGE_VALUE = 999999
 VERBOSE = True
 
-# convert .txt file to a list of Ballot objects.
 def read_votes(file_path):
+    """Convert .txt file to a list of Ballot objects."""
     with open(file_path, 'r') as file: 
         lines = [line.strip() for line in file if not line.startswith('#')]
         votes = [Ballot(line) for line in lines]
     return votes
 
 
-# Reduce the considered alternatives and/or the number of votes (randomly)
 def reduce_votes(votes, alts, n):
+    """Reduce the considered alternatives and/or the number of votes (randomly)"""
+    
     remove_alts = [x for x in list(range(1, 11 + 1)) if x not in alts] # The alternatives that should be removed
     new_votes = [] # The votes to return later
     count = 0 # The number of removed votes
